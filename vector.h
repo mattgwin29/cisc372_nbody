@@ -11,5 +11,6 @@ __shared__ extern vector3 *d_hPos;
 
 extern double *mass;
 __shared__ extern double *d_mass;
+__shared__ vector3** d_accels;
 
 #endif
