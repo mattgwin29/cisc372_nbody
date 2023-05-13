@@ -6,13 +6,14 @@ typedef double vector3[3];
 extern vector3 *hVel;
 extern vector3 *hPos;
 
-__shared__ extern vector3 *d_hVel;
-__shared__ extern vector3 *d_hPos;
+extern vector3 *d_hVel;
+extern vector3 *d_hPos;
+extern double * d_mass;
 
 extern double *mass;
-__shared__ extern double *d_mass;
-__shared__ vector3** d_accels;
-__shared__ vector3* d_values; 
+//__shared__ extern double *d_mass;
+extern vector3** device_accels;
+extern vector3* device_values; 
 
 
 #endif

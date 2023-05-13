@@ -102,9 +102,12 @@ int main(int argc, char **argv)
 	#ifdef DEBUG
 	printSystem(stdout);
 	#endif
+	//do cuda mallocs and copies here
+	initCudaMemory();
 	for (t_now=0;t_now<DURATION;t_now+=INTERVAL){
 		compute();
 	}
+	//do cudafrees here
 	clock_t t1=clock()-t0;
 #ifdef DEBUG
 	printSystem(stdout);
