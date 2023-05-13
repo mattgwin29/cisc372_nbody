@@ -7,6 +7,7 @@
 #include "planets.h"
 #include "compute.h"
 
+
 // represents the objects in the system.  Global variables
 vector3 *hVel;
 vector3 *hPos;
@@ -107,6 +108,8 @@ int main(int argc, char **argv)
 	for (t_now=0;t_now<DURATION;t_now+=INTERVAL){
 		compute();
 	}
+	freeCudaMemory();
+
 	//do cudafrees here
 	clock_t t1=clock()-t0;
 #ifdef DEBUG

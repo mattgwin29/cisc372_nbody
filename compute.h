@@ -4,6 +4,8 @@
 void compute();
 
 void initCudaMemory();
+
+void freeCudaMemory();
 /*void populate_acceleration(vector3* values, vector3** accel, int local_start, int local_end);
 
 void compute_pairwise_acceleration(vector3* values, vector3** accel, int local_start, int local_end);

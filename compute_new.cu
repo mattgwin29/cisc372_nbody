@@ -21,6 +21,17 @@ __global__ void populate_acceleration(vector3* device_values, vector3** accel);
 __global__ void compute_pairwise_acceleration(vector3** accel, vector3 *device_hPos, double* mass);
 
 __global__ void sum_rows_from_accel_sum(vector3** accel, vector3 *device_hVel, vector3 *device_hPos);
+
+static void HandleError( cudaError_t err,
+                         const char *file,
+                         int line ) {
+    if (err != cudaSuccess) {
+        printf( "%s in %s at line %d\n", cudaGetErrorString( err ),
+                file, line );
+        exit( EXIT_FAILURE );
+    }
+}
+#define HANDLE_ERROR( err ) (HandleError( err, __FILE__, __LINE__ ))
  
 void initCudaMemory(){
 	    /* Probably need cudamalloc*/
@@ -48,6 +59,15 @@ void initCudaMemory(){
 	// copy values to values and accel 
 
 }
+
+void freeCudaMemory(){
+	cudaFree(d_hVel);
+	cudaFree(d_hPos);
+	cudaFree(d_mass);
+	cudaFree(device_accels);
+	cudaFree(device_values);
+}
+
 void compute(){
     //int index = blockIdx.x * blockDim.x + threadIdx.x;
     //int stride = blockDim.x * gridDim.x;
@@ -61,23 +81,23 @@ void compute(){
 	//copy stuff back to host
 	// ** SEGFAULT cudaMemcpy(&h_values, d_values, NUMENTITIES * NUMENTITIES * sizeof(vector3), cudaMemcpyDeviceToHost);
 	
-	//printf("%d:  %s\n", __LINE__,cudaGetErrorString(cudaGetLastError()));
-	//printf("############################################\n");
+	printf("%d:  %s\n", __LINE__,cudaGetErrorString(cudaGetLastError()));
+	printf("############################################\n");
     compute_pairwise_acceleration<<<grid_size,blocksize>>>(device_accels, d_hPos, mass);
-	//printf("%d:  %s\n", __LINE__,cudaGetErrorString(cudaGetLastError()));
-	//printf("############################################\n");
+	printf("%d:  %s\n", __LINE__,cudaGetErrorString(cudaGetLastError()));
+	printf("############################################\n");
     sum_rows_from_accel_sum<<<NUMENTITIES,3>>>(device_accels, d_hPos, d_hVel); 
 	//copy hpos and hvel back.
 	// copy d_accels back to host
-	//printf("%d:  %s\n", __LINE__,cudaGetErrorString(cudaGetLastError()));
-	//printf("############################################\n");
+	printf("%d:  %s\n", __LINE__,cudaGetErrorString(cudaGetLastError()));
+	printf("############################################\n");
 
 	//cudaMemcpy(&h_accels, d_accels, NUMENTITIES * sizeof(vector3*), cudaMemcpyDeviceToHost);
 
 	//free(h_accels);
 	//free(h_values);
-	cudaMemcpy(hVel, d_hVel, NUMENTITIES * sizeof(vector3), cudaMemcpyDeviceToHost);
-	cudaMemcpy(hPos, d_hPos, NUMENTITIES * sizeof(vector3), cudaMemcpyDeviceToHost);
+	HANDLE_ERROR(cudaMemcpy(&hVel, d_hVel, NUMENTITIES * sizeof(vector3), cudaMemcpyDeviceToHost));
+	HANDLE_ERROR(cudaMemcpy(&hPos, d_hPos, NUMENTITIES * sizeof(vector3), cudaMemcpyDeviceToHost));
 }
 
 
