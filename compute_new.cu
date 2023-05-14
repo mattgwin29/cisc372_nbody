@@ -72,14 +72,14 @@ void compute(){
 	// Leave debug prints if I need them later
 	
 	/*printf("%d:  %s\n", __LINE__,cudaGetErrorString(cudaGetLastError()));
-	printf("############################################\n");
+	printf("############################################\n");*/
     compute_pairwise_acceleration<<<grid_size,blocksize>>>(device_accels, d_hPos, d_mass);
-	printf("%d:  %s\n", __LINE__,cudaGetErrorString(cudaGetLastError()));
-	printf("############################################\n");
+	/*printf("%d:  %s\n", __LINE__,cudaGetErrorString(cudaGetLastError()));
+	printf("############################################\n");*/
     sum_rows_from_accel_sum<<<NUMENTITIES,3>>>(device_accels, d_hPos, d_hVel); 
 	//copy hpos and hvel back.
 	// copy d_accels back to host
-	printf("%d:  %s\n", __LINE__,cudaGetErrorString(cudaGetLastError()));
+	/*printf("%d:  %s\n", __LINE__,cudaGetErrorString(cudaGetLastError()));
 	printf("############################################\n");*/
 
 	HANDLE_ERROR(cudaMemcpy(hVel, d_hVel, NUMENTITIES * sizeof(vector3), cudaMemcpyDeviceToHost));
